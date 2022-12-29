@@ -6,7 +6,7 @@ edition = "2021"
 [dependencies]
 dds = { git = "https://github.com/offsetting/dds" }
 modular-bitfield = "0.11"
-binrw = "0.8"
+binrw = "0.10"
 
 [profile.release]
 lto = true
