@@ -3,6 +3,7 @@ use dds::D3DFormat;
 #[derive(Debug, Copy, Clone)]
 pub enum Format {
   Dxt1,
+  Dxt3,
   Dxt5,
   RGBA8,
 }
@@ -22,6 +23,12 @@ pub(crate) const DXT1: FormatData = FormatData {
   bytes_per_block: 8,
 };
 
+pub(crate) const DXT3: FormatData = FormatData {
+  block_width: 4,
+  block_height: 4,
+  bytes_per_block: 16,
+};
+
 pub(crate) const DXT5: FormatData = FormatData {
   block_width: 4,
   block_height: 4,
@@ -37,6 +44,7 @@ pub(crate) const RGBA8: FormatData = FormatData {
 pub(crate) fn get_dds_format(format: &Format) -> D3DFormat {
   match format {
     Format::Dxt1 => D3DFormat::DXT1,
+    Format::Dxt3 => D3DFormat::DXT3,
     Format::Dxt5 => D3DFormat::DXT5,
     Format::RGBA8 => D3DFormat::A8R8G8B8,
   }
@@ -45,6 +53,7 @@ pub(crate) fn get_dds_format(format: &Format) -> D3DFormat {
 pub(crate) fn get_format_data(format: &Format) -> FormatData {
   match format {
     Format::Dxt1 => DXT1,
+    Format::Dxt3 => DXT3,
     Format::Dxt5 => DXT5,
     Format::RGBA8 => RGBA8,
   }

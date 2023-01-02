@@ -16,7 +16,7 @@ pub(crate) const fn align(x: u32, alignment: u32) -> u32 {
 // see /licenses/xenia.txt
 pub(crate) const fn log2_ceil(x: u32) -> u32 {
   if x == 0 {
-    panic!("please don't use zeros -> because we return a u32");
+    return 32;
   }
 
   // 32 = bits for u32
