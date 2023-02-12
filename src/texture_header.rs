@@ -1,5 +1,5 @@
 use binrw::{BinRead, BinWrite};
-use modular_bitfield::{bitfield, BitfieldSpecifier, specifiers::*};
+use modular_bitfield::{bitfield, specifiers::*, BitfieldSpecifier};
 
 // https://github.com/xenia-project/xenia/blob/master/src/xenia/gpu/xenos.h
 // see /licenses/xenia.txt

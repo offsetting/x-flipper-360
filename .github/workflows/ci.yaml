@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ main ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ${{ format('{0}-latest', matrix.os) }}
@@ -13,33 +17,26 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu, windows, macos ]
-        channel: [ stable ]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: actions-rs/toolchain@v1
+      - uses: actions/cache@v3
         with:
-          toolchain: ${{ matrix.channel }}
-          target: ${{ matrix.target }}
-          override: true
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - uses: dtolnay/rust-toolchain@stable
 
       - name: Test
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
+        run: cargo test
 
       - name: Build
-        uses: actions-rs/cargo@v1
-        continue-on-error: ${{ matrix.channel != 'stable' }}
-        with:
-          command: build
-          args: --release
-
-      - uses: actions/upload-artifact@v2
-        if: ${{ matrix.channel == 'stable' }}
-        with:
-          name: x-flipper-360_${{ matrix.os }}
-          path: |           
-            target/release/x-flipper-360*
-            target/release/libx-flipper-360*
+        run: cargo build --release

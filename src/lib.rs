@@ -188,9 +188,6 @@ fn validate_provided_dds(dds: &Dds, info: &TextureInfo, mipmap_levels: u32) {
   }
 
   if dds.get_num_mipmap_levels() != mipmap_levels {
-    panic!(
-      "Provided dds has invalid mipmap level count, expected was {}.",
-      mipmap_levels
-    );
+    panic!("Provided dds has invalid mipmap level count, expected was {mipmap_levels}.");
   }
 }
