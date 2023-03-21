@@ -56,8 +56,8 @@ pub fn convert_to_dds<W: Write>(
     let input_offset = info.get_mip_location(mip, &mut offset_x, &mut offset_y, true) as usize;
 
     let (width, height) = info.get_mip_size(mip);
-    let blocks_x = width / format_data.block_width;
-    let blocks_y = height / format_data.block_height;
+    let blocks_x = 1.max(width / format_data.block_width);
+    let blocks_y = 1.max(height / format_data.block_height);
 
     let input = &src[input_offset..];
     let output = &mut dds.data[output_offset..];
@@ -101,8 +101,8 @@ pub fn convert_from_dds<R: Read, W: Write>(
   for mip in 0..dds.get_num_mipmap_levels() {
     let (width, height) = info.get_mip_size(mip);
 
-    let blocks_x = width / format_data.block_width;
-    let blocks_y = height / format_data.block_height;
+    let blocks_x = 1.max(width / format_data.block_width);
+    let blocks_y = 1.max(height / format_data.block_height);
 
     expected_size += (blocks_x * blocks_y * format_data.bytes_per_block) as usize;
   }
@@ -117,8 +117,8 @@ pub fn convert_from_dds<R: Read, W: Write>(
     let output_offset = info.get_mip_location(mip, &mut offset_x, &mut offset_y, true) as usize;
 
     let (width, height) = info.get_mip_size(mip);
-    let blocks_x = width / format_data.block_width;
-    let blocks_y = height / format_data.block_height;
+    let blocks_x = 1.max(width / format_data.block_width);
+    let blocks_y = 1.max(height / format_data.block_height);
 
     let input = &dds.data[input_offset..];
     let output = &mut output[output_offset..];

@@ -78,16 +78,16 @@ impl<'a> TextureInfo<'a> {
     // Walk forward to find the address of the mip.
     let mut packed_mip_base = 1;
 
-    for i in packed_mip_base..mip {
+    for i in 1..mip {
       let mip_width = 1.max(width_pow2 >> i);
       let mip_height = 1.max(height_pow2 >> i);
 
       if mip_width.min(mip_height) <= 16 {
-        // We've reached the point where the mips are packed into a single tile.
-        packed_mip_base = i;
+        // We've reached the point where the mips are packed into a single tile
         break;
       }
       address_offset += self.get_mip_extent(i, is_guest).all_blocks() * bytes_per_block;
+      packed_mip_base += 1;
     }
 
     // Now, check if the mip is packed at an offset.
@@ -101,7 +101,7 @@ impl<'a> TextureInfo<'a> {
     address_base + address_offset
   }
 
-  fn get_packed_tile_offset(
+  pub(crate) fn get_packed_tile_offset(
     &self,
     packed_tile: u32,
     offset_x: &mut u32,
@@ -124,7 +124,7 @@ impl<'a> TextureInfo<'a> {
     )
   }
 
-  fn get_packed_tile_offset0(
+  pub(crate) fn get_packed_tile_offset0(
     &self,
     width: u32,
     height: u32,
@@ -284,7 +284,7 @@ impl TextureExtent {
       }
 
       // Is depth special?
-      // extent.depth = extent.depth;
+      extent.depth = extent.depth;
     } else {
       extent.pitch = extent.block_pitch_h * format.block_width;
       extent.height = extent.block_pitch_v * format.block_height;
